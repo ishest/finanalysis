@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib import font_manager
+
+
+data = pd.read_csv('spx.csv', index_col=0)['close']
+
+data.index = pd.to_datetime(data.index, unit='s')
+data_change = data.pct_change()
+# data_change
+
+monthly_mean = data_change.groupby(data_change.index.month).mean()
+
+
+x = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+y = monthly_mean
+
+font = font_manager.FontProperties(family='Arial', size=14)
+
+
+plt.style.use('bmh')
+fig, ax = plt.subplots(figsize=(10, 8))
+ax.bar(x, y, color='#006699', alpha=0.8)
+
+# Add a title and axis labels
+ax.set_title("Average monthly return of the S&P500 for more than 100 years", fontproperties=font)
+ax.set_xlabel("month", fontproperties=font)
+ax.set_ylabel("return in %", fontproperties=font);
